@@ -1,0 +1,33 @@
+<mat-form-field appearance="fill">
+  <mat-label>Input</mat-label>
+  <input matInput>
+</mat-form-field>
+<mat-form-field appearance="fill">
+  <mat-label>Select</mat-label>
+  <mat-select>
+    <mat-option value="one">First option</mat-option>
+    <mat-option value="two">Second option</mat-option>
+  </mat-select>
+</mat-form-field>
+<mat-form-field appearance="fill">
+  <mat-label>Textarea</mat-label>
+  <textarea matInput></textarea>
+</mat-form-field>
+
+
+<mat-list>
+  <h3 matSubheader>Kandidater</h3>
+  <mat-list-item *ngFor="let candidate of candidates$ | async">
+    <h4 matLine>ID: {{candidate.id}}</h4>
+    <p matLine>Namn: {{ candidate.firstName }} {{ candidate.lastName }}</p>
+    <p matLine>Ålder: {{ candidate.age }}</p>
+    <p matLine>Email: {{ candidate.email }}</p>
+    <p matLine>Adress: {{ candidate.address }}</p>
+    <p matLine>Status: {{ candidate.status }}</p>
+    <mat-divider></mat-divider>
+  </mat-list-item>
+</mat-list>
+
+
+
+
