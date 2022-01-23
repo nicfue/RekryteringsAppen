@@ -1,0 +1,36 @@
+<form [formGroup]="candidatesForm" (ngSubmit)="onSubmit()">
+  <label for="first-name">Förnamn: </label>
+  <input id="first-name" type="text" formControlName="firstName" />
+
+  <label for="last-name">Efternamn: </label>
+  <input id="last-name" type="text" formControlName="lastName" />
+
+  <label for="age">Ålder: </label>
+  <input id="last-name" type="text" formControlName="age" />
+
+  <label for="email">Email: </label>
+  <input id="email" type="email" formControlName="email" />
+  <!-- <p *ngIf="candidateForm.get('email')?.errors">Felaktig emailadress</p> -->
+
+  <div formGroupName="address">
+    <label for="street">Adress: </label>
+    <input id="street" type="text" formControlName="street" />
+
+    <label for="city">Stad: </label>
+    <input id="city" type="text" formControlName="city" />
+
+    <label for="zip">Postnummer: </label>
+    <input id="zip" type="text" formControlName="zip" />
+  </div>
+
+  <div>
+    <label for="status">Status: </label>
+    <select formControlName="status">
+      <option *ngFor="let statusType of status" [value]="statusType.value">
+        {{ statusType.viewValue }}
+      </option>
+    </select>
+  </div>
+
+  <button type="submit">Lägg till</button>
+</form>

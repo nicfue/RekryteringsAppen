@@ -1,26 +1,26 @@
+
+import { StatusCode } from "../enums/status-codes.enum";
+import { Address } from "./address.model";
 import { CandidateResponse } from "./candidate.response.model";
-import { Status } from "./status.model";
 
 export interface Candidate {
-  id: number;
   firstName: string;
   lastName: string;
   age: number;
   email: string;
-  address: string;
-  status: string;
+  address: Address;
+  status: StatusCode;
 }
 
 export function mapToCandidate(data: CandidateResponse): Candidate {
-  const { id, firstName, lastName, age, email, address, status } = data;
+  const { firstName, lastName, age, email, address, status } = data;
 
   return {
-    id,
     firstName,
     lastName,
     age,
     email,
     address,
-    status: Status[status] as string,
+    status: status as StatusCode,
   };
 }

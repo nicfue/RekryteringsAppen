@@ -1,0 +1,20 @@
+<candidates-form
+  [candidatesForm]="candidatesForm"
+  [status]="status"
+  (candidateSaved)="onCandidateSaved($event)"
+></candidates-form>
+
+<mat-list>
+  <h3 matSubheader>Kandidater</h3>
+  <mat-list-item *ngFor="let candidate of candidates$ | async">
+    <p matLine>Namn: {{ candidate.firstName }} {{ candidate.lastName }}</p>
+    <p matLine>Ålder: {{ candidate.age }}</p>
+    <p matLine>Email: {{ candidate.email }}</p>
+    <p matLine>Adress: {{ candidate.address.street }}</p>
+    <p matLine>Stad: {{ candidate.address.city }}</p>
+    <p matLine>Postnummer: {{ candidate.address.zip }}</p>
+    <p matLine>Status: {{ candidate.status }}</p>
+    <mat-divider></mat-divider>
+  </mat-list-item>
+</mat-list>
+
