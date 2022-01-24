@@ -1,0 +1,12 @@
+.header {
+  background-color: #00005a;
+  border-bottom: 1px solid red;
+  display: flex;
+  height: 4rem;
+
+  &__title {
+    color: #fff;
+    font-size: 31px;
+    margin: auto;
+  }
+}

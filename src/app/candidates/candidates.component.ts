@@ -46,14 +46,16 @@ export class CandidatesComponent implements OnInit {
     return this.searchForm.get(this.searchFormControlName) as AbstractControl;
   }
 
-  setSearchString(): void {
-    this.searchValue = this.searchForm.get('search')?.value as string;
+  setSearchString(searchString: string): void {
+    this.searchValue = searchString;
   }
 
   initForm(): void {
     if (!this.searchFormControl.value) {
       this.searchValue = '';
     }
+    this.editMode = false;
+    this.candidatesForm.reset();
   }
 
   constructor(

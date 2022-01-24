@@ -10,9 +10,12 @@ import { Status } from '../../../models/status.model';
 })
 export class CandidatesFormComponent implements OnInit {
   @Input() candidatesForm!: FormGroup;
+  @Input() searchForm!: FormGroup
   @Input() status: Status[] = [];
   @Input() editMode = false;
   @Output() candidateSaved = new EventEmitter<Candidate>();
+  @Output() searchEmitted = new EventEmitter<string>();
+  @Output() initFormEmitted = new EventEmitter<unknown>();
 
   ngOnInit(): void { }
 
@@ -29,5 +32,13 @@ export class CandidatesFormComponent implements OnInit {
       : (<FormGroup>this.candidatesForm.controls[controlName]).invalid &&
       ((<FormGroup>this.candidatesForm.controls[controlName])?.dirty ||
         (<FormGroup>this.candidatesForm.controls[controlName])?.touched)
+  }
+
+  setSearchString() {
+    this.searchEmitted.emit(this.searchForm.value.search);
+  }
+
+  initForm(): void {
+    this.initFormEmitted.emit();
   }
 }

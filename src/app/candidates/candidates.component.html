@@ -1,28 +1,49 @@
-<candidates-form
-  [candidatesForm]="candidatesForm"
-  [status]="status"
-  [editMode]="editMode"
-  (candidateSaved)="onSubmit($event)"
-></candidates-form>
+<div class="candidates">
+  <candidates-form
+    [candidatesForm]="candidatesForm"
+    [searchForm]="searchForm"
+    [status]="status"
+    [editMode]="editMode"
+    (candidateSaved)="onSubmit($event)"
+    (searchEmitted)="setSearchString($event)"
+    (initFormEmitted)="initForm()"
+  ></candidates-form>
 
-<form [formGroup]="searchForm" (ngSubmit)="setSearchString()">
-  <input type="text" [formControl]="searchFormControl" (ngModelChange)="initForm()">
-  <button type="submit">Sök</button>
-</form>
+  <div class="candidates__content">
+    <h1>Kandidater</h1>
+    <ng-container *ngIf="candidates$ | async as candidates">
+      <ul
+        *ngFor="
+          let candidate of candidates | filter: searchValue;
+          let i = index
+        "
+      >
+        <li>Namn: {{ candidate.firstName }} {{ candidate.lastName }}</li>
+        <li>Ålder: {{ candidate.age }}</li>
+        <li>Email: {{ candidate.email }}</li>
+        <li>Adress: {{ candidate.address.street }}</li>
+        <li>Stad: {{ candidate.address.city }}</li>
+        <li>Postnummer: {{ candidate.address.zip }}</li>
+        <li>Status: {{ candidate.status }}</li>
 
-<h3>Kandidater</h3>
-  <ng-container *ngIf="candidates$ | async as candidates">
-    <ul *ngFor="let candidate of candidates | filter: searchValue; let i = index">
-      <ul>Namn: {{ candidate.firstName }} {{ candidate.lastName }}</ul>
-      <ul>Ålder: {{ candidate.age }}</ul>
-      <ul>Email: {{ candidate.email }}</ul>
-      <ul>Adress: {{ candidate.address.street }}</ul>
-      <ul>Stad: {{ candidate.address.city }}</ul>
-      <ul>Postnummer: {{ candidate.address.zip }}</ul>
-      <ul>Status: {{ candidate.status }}</ul>
-      <button type="button" (click)="editCandidate(candidate, i)">Ändra</button>
-      <button type="button" (click)="deleteCandidate(i)">Ta bort</button>
-      <hr>
-    </ul>
-  </ng-container>
-
+        <div class="candidates__ctr-wrapper">
+          <button
+            class="candidates__button-primary"
+            type="button"
+            (click)="editCandidate(candidate, i)"
+          >
+            Ändra
+          </button>
+          <button
+            class="candidates__button-secondary"
+            type="button"
+            (click)="deleteCandidate(i)"
+          >
+            Ta bort
+          </button>
+        </div>
+        <hr />
+      </ul>
+    </ng-container>
+  </div>
+</div>
