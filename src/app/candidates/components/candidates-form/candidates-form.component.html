@@ -1,26 +1,32 @@
 <form [formGroup]="candidatesForm" (ngSubmit)="onSubmit()">
   <label for="first-name">Förnamn: </label>
   <input id="first-name" type="text" formControlName="firstName" />
+  <p *ngIf="validateControl('firstName')">Förnamn är obligatoriskt</p>
 
   <label for="last-name">Efternamn: </label>
   <input id="last-name" type="text" formControlName="lastName" />
+  <p *ngIf="validateControl('lastName')">Efternamn är obligatoriskt</p>
 
   <label for="age">Ålder: </label>
-  <input id="last-name" type="text" formControlName="age" />
+  <input id="last-name" type="number" formControlName="age" />
+  <p *ngIf="validateControl('age')">Ålder är obligatoriskt</p>
 
-  <label for="email">Email: </label>
+  <label for="email">Epost: </label>
   <input id="email" type="email" formControlName="email" />
-  <!-- <p *ngIf="candidateForm.get('email')?.errors">Felaktig emailadress</p> -->
+  <p *ngIf="validateControl('email')">Epost är obligatoriskt</p>
 
   <div formGroupName="address">
     <label for="street">Adress: </label>
     <input id="street" type="text" formControlName="street" />
+    <p *ngIf="validateControl('street', 'address')">Adress är obligatoriskt</p>
 
     <label for="city">Stad: </label>
     <input id="city" type="text" formControlName="city" />
+    <p *ngIf="validateControl('city', 'address')">Stad är obligatoriskt</p>
 
     <label for="zip">Postnummer: </label>
-    <input id="zip" type="text" formControlName="zip" />
+    <input id="zip" type="number" formControlName="zip" />
+    <p *ngIf="validateControl('zip', 'address')">Postnummer är obligatoriskt</p>
   </div>
 
   <div>
@@ -30,7 +36,11 @@
         {{ statusType.viewValue }}
       </option>
     </select>
+    <p *ngIf="validateControl('status')">Status är obligatoriskt</p>
   </div>
 
-  <button type="submit">{{!editMode ? 'Lägg till' : 'Uppdatera'}}</button>
+  <button type="submit">{{ !editMode ? "Lägg till" : "Uppdatera" }}</button>
+  <button *ngIf="editMode" type="button" (click)="editMode = false">
+    Tillbaka
+  </button>
 </form>

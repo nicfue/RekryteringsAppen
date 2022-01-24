@@ -5,17 +5,24 @@
   (candidateSaved)="onSubmit($event)"
 ></candidates-form>
 
+<form [formGroup]="searchForm" (ngSubmit)="setSearchString()">
+  <input type="text" [formControl]="searchFormControl" (ngModelChange)="initForm()">
+  <button type="submit">Sök</button>
+</form>
+
 <h3>Kandidater</h3>
-  <ul *ngFor="let candidate of candidates$ | async; let i = index">
-    <ul>Namn: {{ candidate.firstName }} {{ candidate.lastName }}</ul>
-    <ul>Ålder: {{ candidate.age }}</ul>
-    <ul>Email: {{ candidate.email }}</ul>
-    <ul>Adress: {{ candidate.address.street }}</ul>
-    <ul>Stad: {{ candidate.address.city }}</ul>
-    <ul>Postnummer: {{ candidate.address.zip }}</ul>
-    <ul>Status: {{ candidate.status }}</ul>
-    <button type="button" (click)="deleteCandidate(i)">Ta bort</button>
-    <button type="button" (click)="editCandidate(candidate, i)">Ändra</button>
-    <hr>
-  </ul>
+  <ng-container *ngIf="candidates$ | async as candidates">
+    <ul *ngFor="let candidate of candidates | filter: searchValue; let i = index">
+      <ul>Namn: {{ candidate.firstName }} {{ candidate.lastName }}</ul>
+      <ul>Ålder: {{ candidate.age }}</ul>
+      <ul>Email: {{ candidate.email }}</ul>
+      <ul>Adress: {{ candidate.address.street }}</ul>
+      <ul>Stad: {{ candidate.address.city }}</ul>
+      <ul>Postnummer: {{ candidate.address.zip }}</ul>
+      <ul>Status: {{ candidate.status }}</ul>
+      <button type="button" (click)="editCandidate(candidate, i)">Ändra</button>
+      <button type="button" (click)="deleteCandidate(i)">Ta bort</button>
+      <hr>
+    </ul>
+  </ng-container>
 

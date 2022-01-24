@@ -9,7 +9,7 @@ export const CANDIDATES = [
       city: 'Stockholm',
       zip: '12123'
     },
-    status: 'kontakt'
+    status: 'Kontakt'
   },
   {
     firstName: 'Kalle',
@@ -21,7 +21,7 @@ export const CANDIDATES = [
       city: 'Stockholm',
       zip: '24223'
     },
-    status: 'dialog'
+    status: 'Dialog'
   },
   {
     firstName: 'Nisse',
@@ -33,7 +33,7 @@ export const CANDIDATES = [
       city: 'Malmö',
       zip: '56544'
     },
-    status: 'erbjudande'
+    status: 'Erbjudande'
   },
   {
     firstName: 'Putte',
@@ -45,7 +45,7 @@ export const CANDIDATES = [
       city: 'Göteborg',
       zip: '45332'
     },
-    status: 'intervju'
+    status: 'Intervju'
   },
   {
     firstName: 'Svenne',
@@ -57,6 +57,6 @@ export const CANDIDATES = [
       city: 'Malmö',
       zip: '34245'
     },
-    status: 'kontakt'
+    status: 'Kontakt'
   }
 ]

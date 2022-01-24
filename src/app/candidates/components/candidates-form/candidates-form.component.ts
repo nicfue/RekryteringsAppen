@@ -20,4 +20,14 @@ export class CandidatesFormComponent implements OnInit {
     this.candidateSaved.emit(this.candidatesForm.value);
   }
 
+  validateControl(controlName: string, nestedControlName?: string): boolean {
+    return nestedControlName
+      ?
+      (<FormGroup>this.candidatesForm.controls[nestedControlName]).controls[controlName].invalid &&
+      ((<FormGroup>this.candidatesForm.controls[nestedControlName]).controls[controlName].dirty ||
+        (<FormGroup>this.candidatesForm.controls[nestedControlName]).controls[controlName].touched)
+      : (<FormGroup>this.candidatesForm.controls[controlName]).invalid &&
+      ((<FormGroup>this.candidatesForm.controls[controlName])?.dirty ||
+        (<FormGroup>this.candidatesForm.controls[controlName])?.touched)
+  }
 }

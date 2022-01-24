@@ -1,7 +1,7 @@
 export enum StatusCode {
-  KONTAKT = 'kontakt',
-  DIALOG = 'dialog',
-  INTERVJU = 'intervju',
-  ERBJUDANDE = 'erbjudande',
-  AVSLUTAD = 'avslutad'
+  KONTAKT = 'Kontakt',
+  DIALOG = 'Dialog',
+  INTERVJU = 'Intervju',
+  ERBJUDANDE = 'Erbjudande',
+  AVSLUTAD = 'Avslutad'
 }

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
 import { StatusCode } from '../enums/status-codes.enum';
 import { Candidate } from '../models/candidate.model';
 import { Status } from '../models/status.model';
@@ -12,6 +12,7 @@ import { CandidatesService } from './candidates.service';
   styleUrls: ['./candidates.component.scss']
 })
 export class CandidatesComponent implements OnInit {
+  readonly searchFormControlName = 'search';
   candidates$ = this.candidatesService.fetchCandidates$();
   status: Status[] = [
     { value: StatusCode.KONTAKT, viewValue: 'Kontakt' },
@@ -25,7 +26,7 @@ export class CandidatesComponent implements OnInit {
     firstName: new FormControl('', Validators.required),
     lastName: new FormControl('', Validators.required),
     age: new FormControl('', Validators.required),
-    email: new FormControl(null, [Validators.required, Validators.email]),
+    email: new FormControl('', [Validators.required, Validators.email]),
     address: new FormGroup({
       street: new FormControl('', Validators.required),
       city: new FormControl('', Validators.required),
@@ -36,6 +37,24 @@ export class CandidatesComponent implements OnInit {
 
   editMode: boolean = false;
   editedItemIndex!: number;
+  searchValue!: string;
+  searchForm = new FormGroup({
+    search: new FormControl('')
+  })
+
+  get searchFormControl(): any {
+    return this.searchForm.get(this.searchFormControlName) as AbstractControl;
+  }
+
+  setSearchString(): void {
+    this.searchValue = this.searchForm.get('search')?.value as string;
+  }
+
+  initForm(): void {
+    if (!this.searchFormControl.value) {
+      this.searchValue = '';
+    }
+  }
 
   constructor(
     private candidatesService: CandidatesService,
@@ -55,6 +74,7 @@ export class CandidatesComponent implements OnInit {
   }
 
   onSubmit(candidate: Candidate) {
+    this.candidatesForm.markAllAsTouched();
     if (!this.candidatesForm.valid) {
       return;
     }
