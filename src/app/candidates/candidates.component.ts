@@ -7,7 +7,7 @@ import { CandidatedApiService } from './candidates.api.service';
 import { CandidatesService } from './candidates.service';
 
 @Component({
-  selector: 'app-candidates',
+  selector: 'candidates',
   templateUrl: './candidates.component.html',
   styleUrls: ['./candidates.component.scss']
 })
@@ -34,19 +34,52 @@ export class CandidatesComponent implements OnInit {
     status: new FormControl('', Validators.required),
   });
 
+  editMode: boolean = false;
+  editedItemIndex!: number;
+
   constructor(
     private candidatesService: CandidatesService,
-    private candidatesApiService: CandidatedApiService
+    private candidatesApiService: CandidatedApiService,
   ) { }
 
   ngOnInit(): void {
+    this.candidatesApiService.candidatesChanged.subscribe(() => {
+      this.candidates$ = this.candidatesService.fetchCandidates$();
+    })
+    this.candidatesService.startedEditing
+      .subscribe((index: number) => {
+        if (this.editMode) {
+          this.editedItemIndex = index;
+        }
+      })
   }
 
-  onCandidateSaved(candidate: Candidate) {
-    console.log(candidate);
-    console.log(this.candidatesForm);
+  onSubmit(candidate: Candidate) {
+    if (!this.candidatesForm.valid) {
+      return;
+    }
 
-    this.candidatesApiService.saveCandidate$(candidate);
+    if (this.editMode) {
+      const value = this.candidatesForm.value;
+      const newCandidate = new Candidate(value.firstName, value.lastName, value.age, value.email, value.address, value.status);
+      this.candidatesService.updateCandidate$(this.editedItemIndex, newCandidate);
+    } else {
+      this.candidatesService.saveCandidate$(candidate);
+    }
+    this.editMode = false;
+    this.candidatesForm.reset();
+  }
+
+  deleteCandidate(candidateId: number) {
+    this.candidatesService.deleteCandidate(candidateId);
+  }
+
+  editCandidate(candidate: Candidate, index: number) {
+    this.editMode = true;
+    this.candidatesService.startedEditing.next(index);
+    this.candidatesForm.patchValue({
+      ...candidate
+    })
   }
 
 }

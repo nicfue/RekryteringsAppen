@@ -1,4 +1,3 @@
-import { StatusCode } from "../enums/status-codes.enum";
 import { Address } from "./address.model";
 
 export interface CandidateResponse {

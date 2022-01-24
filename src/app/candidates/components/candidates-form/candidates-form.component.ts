@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { FormGroup } from '@angular/forms';
 import { Candidate } from '../../../models/candidate.model';
 import { Status } from '../../../models/status.model';
 
@@ -8,8 +9,9 @@ import { Status } from '../../../models/status.model';
   styleUrls: ['./candidates-form.component.scss']
 })
 export class CandidatesFormComponent implements OnInit {
-  @Input() candidatesForm: any;
-  @Input() status!: Status[];
+  @Input() candidatesForm!: FormGroup;
+  @Input() status: Status[] = [];
+  @Input() editMode = false;
   @Output() candidateSaved = new EventEmitter<Candidate>();
 
   ngOnInit(): void { }
