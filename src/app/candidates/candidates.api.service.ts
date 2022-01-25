@@ -10,25 +10,26 @@ import { CandidateResponse } from "../models/candidate.response.model";
 })
 export class CandidatedApiService {
   candidatesChanged = new Subject<CandidateResponse[]>();
+  candidateEdited = new Subject<number>();
 
   public fetchCandidates$(): Observable<{ data: CandidateResponse[] }> {
     return of({ data: CANDIDATES });
   }
 
   public saveCandidate$(candidate: Candidate): Observable<Candidate> {
-    CANDIDATES.push(candidate)
+    CANDIDATES.unshift(candidate);
     this.candidatesChanged.next(CANDIDATES.slice());
     return of(candidate);
-  }
-
-  deleteCandidate(index: number) {
-    CANDIDATES.splice(index, 1);
-    this.candidatesChanged.next(CANDIDATES.slice());
   }
 
   updateCandidate$(index: number, newCandidate: Candidate): Observable<Candidate> {
     CANDIDATES[index] = newCandidate;
     this.candidatesChanged.next(CANDIDATES.slice());
     return of(newCandidate);
+  }
+
+  deleteCandidate(index: number) {
+    CANDIDATES.splice(index, 1);
+    this.candidatesChanged.next(CANDIDATES.slice());
   }
 }

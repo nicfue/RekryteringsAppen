@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
+import { Subscription } from 'rxjs';
 import { StatusCode } from '../enums/status-codes.enum';
 import { Candidate } from '../models/candidate.model';
 import { Status } from '../models/status.model';
@@ -11,7 +12,7 @@ import { CandidatesService } from './candidates.service';
   templateUrl: './candidates.component.html',
   styleUrls: ['./candidates.component.scss']
 })
-export class CandidatesComponent implements OnInit {
+export class CandidatesComponent implements OnInit, OnDestroy {
   readonly searchFormControlName = 'search';
   candidates$ = this.candidatesService.fetchCandidates$();
   status: Status[] = [
@@ -42,6 +43,9 @@ export class CandidatesComponent implements OnInit {
     search: new FormControl('')
   })
 
+  changedSub!: Subscription;
+  editingSub!: Subscription;
+
   get searchFormControl(): any {
     return this.searchForm.get(this.searchFormControlName) as AbstractControl;
   }
@@ -64,15 +68,11 @@ export class CandidatesComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.candidatesApiService.candidatesChanged.subscribe(() => {
+    this.changedSub = this.candidatesApiService.candidatesChanged.subscribe(() => {
       this.candidates$ = this.candidatesService.fetchCandidates$();
     })
-    this.candidatesService.startedEditing
-      .subscribe((index: number) => {
-        if (this.editMode) {
-          this.editedItemIndex = index;
-        }
-      })
+    this.editingSub = this.candidatesApiService.candidateEdited
+      .subscribe((index: number) => this.editMode ? this.editedItemIndex = index : null);
   }
 
   onSubmit(candidate: Candidate) {
@@ -98,10 +98,15 @@ export class CandidatesComponent implements OnInit {
 
   editCandidate(candidate: Candidate, index: number) {
     this.editMode = true;
-    this.candidatesService.startedEditing.next(index);
+    this.candidatesApiService.candidateEdited.next(index);
     this.candidatesForm.patchValue({
       ...candidate
     })
+  }
+
+  ngOnDestroy(): void {
+    this.changedSub.unsubscribe();
+    this.editingSub.unsubscribe();
   }
 
 }
