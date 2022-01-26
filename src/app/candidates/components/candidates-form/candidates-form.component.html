@@ -53,7 +53,7 @@
           class="candidates__button-secondary"
           *ngIf="editMode"
           type="button"
-          (click)="initForm()"
+          (click)="resetForm()"
         >
           Tillbaka
         </button>
@@ -64,7 +64,7 @@
         <input
           type="text"
           formControlName="search"
-          (ngModelChange)="initForm()"
+          (ngModelChange)="resetForm()"
         />
         <button class="candidates__button-primary" type="submit">Sök</button>
       </form>

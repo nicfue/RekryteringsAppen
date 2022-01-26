@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Candidate } from '../../../models/candidate.model';
 import { Status } from '../../../models/status.model';
@@ -8,19 +8,25 @@ import { Status } from '../../../models/status.model';
   templateUrl: './candidates-form.component.html',
   styleUrls: ['./candidates-form.component.scss']
 })
-export class CandidatesFormComponent implements OnInit {
+export class CandidatesFormComponent {
   @Input() candidatesForm!: FormGroup;
   @Input() searchForm!: FormGroup
   @Input() status: Status[] = [];
   @Input() editMode = false;
-  @Output() candidateSaved = new EventEmitter<Candidate>();
-  @Output() searchEmitted = new EventEmitter<string>();
-  @Output() initFormEmitted = new EventEmitter<unknown>();
-
-  ngOnInit(): void { }
+  @Output() onSaved = new EventEmitter<Candidate>();
+  @Output() onSearch = new EventEmitter<string>();
+  @Output() onReset = new EventEmitter<void>();
 
   onSubmit() {
-    this.candidateSaved.emit(this.candidatesForm.value);
+    this.onSaved.emit(this.candidatesForm.value);
+  }
+
+  setSearchString() {
+    this.onSearch.emit(this.searchForm.value.search);
+  }
+
+  resetForm(): void {
+    this.onReset.emit();
   }
 
   validateControl(controlName: string, nestedControlName?: string): boolean {
@@ -34,11 +40,4 @@ export class CandidatesFormComponent implements OnInit {
         (<FormGroup>this.candidatesForm.controls[controlName])?.touched)
   }
 
-  setSearchString() {
-    this.searchEmitted.emit(this.searchForm.value.search);
-  }
-
-  initForm(): void {
-    this.initFormEmitted.emit();
-  }
 }

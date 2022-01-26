@@ -4,9 +4,9 @@
     [searchForm]="searchForm"
     [status]="status"
     [editMode]="editMode"
-    (candidateSaved)="onSubmit($event)"
-    (searchEmitted)="setSearchString($event)"
-    (initFormEmitted)="initForm()"
+    (onSaved)="onSubmit($event)"
+    (onSearch)="setSearchString($event)"
+    (onReset)="resetForm()"
   ></candidates-form>
 
   <div class="candidates__content">

@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
-import { Subscription } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { StatusCode } from '../enums/status-codes.enum';
 import { Candidate } from '../models/candidate.model';
 import { Status } from '../models/status.model';
@@ -14,7 +14,7 @@ import { CandidatesService } from './candidates.service';
 })
 export class CandidatesComponent implements OnInit, OnDestroy {
   readonly searchFormControlName = 'search';
-  candidates$ = this.candidatesService.fetchCandidates$();
+  candidates$: Observable<Candidate[]> = this.candidatesService.fetchCandidates$();
   status: Status[] = [
     { value: StatusCode.KONTAKT, viewValue: 'Kontakt' },
     { value: StatusCode.DIALOG, viewValue: 'Dialog' },
@@ -46,25 +46,9 @@ export class CandidatesComponent implements OnInit, OnDestroy {
   changedSub!: Subscription;
   editingSub!: Subscription;
 
-  get searchFormControl(): any {
-    return this.searchForm.get(this.searchFormControlName) as AbstractControl;
-  }
-
-  setSearchString(searchString: string): void {
-    this.searchValue = searchString;
-  }
-
-  initForm(): void {
-    if (!this.searchFormControl.value) {
-      this.searchValue = '';
-    }
-    this.editMode = false;
-    this.candidatesForm.reset();
-  }
-
   constructor(
     private candidatesService: CandidatesService,
-    private candidatesApiService: CandidatedApiService,
+    private candidatesApiService: CandidatedApiService
   ) { }
 
   ngOnInit(): void {
@@ -73,6 +57,21 @@ export class CandidatesComponent implements OnInit, OnDestroy {
     })
     this.editingSub = this.candidatesApiService.candidateEdited
       .subscribe((index: number) => this.editMode ? this.editedItemIndex = index : null);
+  }
+  get searchFormControl(): any {
+    return this.searchForm.get(this.searchFormControlName) as AbstractControl;
+  }
+
+  setSearchString(searchString: string): void {
+    this.searchValue = searchString;
+  }
+
+  resetForm(): void {
+    if (!this.searchFormControl.value) {
+      this.searchValue = '';
+    }
+    this.editMode = false;
+    this.candidatesForm.reset();
   }
 
   onSubmit(candidate: Candidate) {
